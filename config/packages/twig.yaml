@@ -1,6 +1,6 @@
 twig:
-    file_name_pattern: '*.twig'
-
+    file_name_pattern: '*.twig' #permet de reconnaître les fichiers twig
+    form_themes: ['bootstrap_5_layout.html.twig'] #tous les formulaires auront un design de bootstrap
 when@test:
     twig:
         strict_variables: true
