@@ -35,6 +35,22 @@ class Incident
     #[ORM\Column(length: 255)]
     private ?string $reporterEmail = null;
 
+    #[ORM\Column(enumType: Status::class)]
+    private ?Status $status = null;
+
+    #[ORM\Column(enumType: Priority::class)]
+    private ?Priority $priority = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, enumType: Type::class)]
+    private array $types = [];
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable("now");
+        $this->status = Status::NEW;
+        $this->reference = $this->generateReference();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,5 +138,52 @@ class Incident
         $this->reporterEmail = $reporterEmail;
 
         return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(Status $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getPriority(): ?Priority
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(Priority $priority): static
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
+    public function setTypes(array $types): static
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+    private function generateReference()
+    {
+        return implode("", [
+            $this->createdAt->format("y"),
+            $this->createdAt->format("m"),
+            substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5)
+        ]);
     }
 }
